@@ -1,0 +1,36 @@
+name: Run Jmeter Test plan and export report
+
+on:
+  workflow_dispatch
+
+jobs:
+  run-jmeter-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Install Java
+      run: sudo apt-get install -y openjdk-11-jdk
+
+
+    - name: install jmeter
+      run: sudo apt-get install jmeter
+
+
+    - name: Run Jmeter Test Plan
+      run: |
+        jmeter -n -t testPlan.jmx -l result.jtl || echo "Newman tests failed, continuing workflow."
+
+    - name: Generate jmeter Report
+      run: |
+        jmeter -g result.jtl -o report
+
+        
+    - name: Upload Jmeter Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: jmeter-report
+        path: report
