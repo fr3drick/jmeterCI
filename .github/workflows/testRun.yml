@@ -1,7 +1,17 @@
 name: Run Jmeter Test plan and export report
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      argument:
+       description: 'Select the value of thing'
+       required: true
+       type: choice
+       options:
+          - hello
+          - hi
+          - howdy
+       default: 'hello'
 
 jobs:
   run-jmeter-test:
@@ -27,7 +37,7 @@ jobs:
 
     - name: Run Jmeter Test Plan
       run: |
-        jmeter -n -t testPlan.jmx -l result.jtl || echo "Newman tests failed, continuing workflow."
+        jmeter -n -t testPlan.jmx -Jthing=${{inputs.argument}} -l result.jtl || echo "jmeter tests failed, continuing workflow."
 
     - name: Generate jmeter Report
       run: |
