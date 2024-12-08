@@ -17,7 +17,12 @@ jobs:
 
 
     - name: install jmeter
-      run: sudo apt-get install jmeter
+      run: |
+        JMETER_VERSION=5.6.3
+        curl -O https://downloads.apache.org//jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
+        tar -xzf apache-jmeter-${JMETER_VERSION}.tgz
+        mv apache-jmeter-${JMETER_VERSION} $HOME/jmeter
+        echo "$HOME/jmeter/bin" >> $GITHUB_PATH
 
 
     - name: Run Jmeter Test Plan
